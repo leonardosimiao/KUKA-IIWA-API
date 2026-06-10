@@ -12,7 +12,7 @@ version = 'V15032017++'
 
 #######################################################################################################################
 import time, os
-import threading as thread
+import threading
 import rospy
 from std_msgs.msg import String
 
@@ -60,7 +60,7 @@ class iiwa_socket:
 
         try:
             # Starting connection thread
-            thread.start_new_thread( self.socket, (ip, port, ) )
+            threading.Thread(target=self.socket, args=(ip, port), daemon=True).start()
         except:
             print(cl_red('Error: ') + "Unable to start connection thread")
     #   ~M: __init__ ==========================
@@ -104,6 +104,9 @@ class iiwa_socket:
         while self.isconnected:
             try:
                 data = self.connection.recv(self.BUFFER_SIZE)
+                if not data:
+                    continue
+                data = data.decode('utf-8', errors='ignore')
                 last_read_time = time.time()    # Keep received time
 
                 # Process the received data pacage
@@ -194,9 +197,9 @@ class iiwa_socket:
     #   M: Command send thread ==================
     # Each send command runs as a thread. May need to control the maximum running time (valid time to send a command).
     def send(self, cmd):
-        thread.start_new_thread( self.__send, (cmd, ) )
+        threading.Thread(target=self.__send, args=(cmd,), daemon=True).start()
     def __send(self, cmd):
-        self.connection.sendall(cmd+'\r\n')
+        self.connection.sendall((cmd + '\r\n').encode('utf-8'))
     #   ~M: Command send thread ==================
 
 #   ~Class: Kuka iiwa TCP communication    #####################
@@ -210,7 +213,8 @@ class kuka_iiwa_ros_node:
         self.iiwa_soc = iiwa_socket(ip, port)
 
         #   Wait until iiwa is connected zzz!
-        while (not self.iiwa_soc.isready): pass
+        while not self.iiwa_soc.isready:
+            time.sleep(0.1)
 
         #    Make a listener for kuka_iiwa commands
         rospy.Subscriber("kuka_command", String, self.callback)
@@ -277,7 +281,8 @@ def read_conf():
     if os.path.isfile(f_conf):
         IP = ''
         Port = ''
-        for line in open(f_conf, 'r'):
+        with open(f_conf, 'r') as f:
+            for line in f:
             l_splt = line.split()
             if len(l_splt)==4 and l_splt[0] == 'server':
                 IP = l_splt[1]
