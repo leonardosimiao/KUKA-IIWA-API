@@ -61,7 +61,7 @@ class iiwa_socket:
             # Starting connection thread
             thread.start_new_thread( self.socket, (ip, port, ) )
         except:
-            print cl_red('Error: ') + "Unable to start connection thread"
+            print(cl_red('Error: ') + "Unable to start connection thread")
     #   ~M: __init__ ==========================
 
     #   M: Stop connection ====================
@@ -282,7 +282,7 @@ def read_conf():
                 IP = l_splt[1]
                 Port = int(l_splt[3])
         if len(IP.split('.'))!=4 or Port<=0:
-            print cl_red('Error:'), "conf.txt doesn't include correct IP/Port! e.g. server 172.31.1.50 port 1234"
+            print(cl_red('Error:'), "conf.txt doesn't include correct IP/Port! e.g. server 172.31.1.50 port 1234")
             exit()
     else:
         print(cl_red('Error:'), "conf.txt doesn't exist!")
