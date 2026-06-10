@@ -78,20 +78,14 @@ class iiwa_socket:
         server_address = (ip, port)
 
         os.system('clear')
-        print cl_pink('\n==========================================')
-        print cl_pink('<   <  < << SHEFFIELD ROBOTICS >> >  >   >')
-        print cl_pink('==========================================')
-        print cl_pink(' KUKA API for ROS')
-        print cl_pink(' Server Version: ' + version)
-        print cl_pink('==========================================\n')
 
 
-        print cl_cyan('Starting up on:'), 'IP:', ip, 'Port:', port
+        print(cl_cyan('Starting up on:'), 'IP:', ip, 'Port:', port)
         try:
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sock.bind(server_address)
         except:
-            print cl_red('Error: ') + "Connection for KUKA cannot assign requested address:", ip, port
+            print(cl_red('Error: ') + "Connection for KUKA cannot assign requested address:", ip, port)
             os._exit(-1)
 
 
@@ -99,10 +93,10 @@ class iiwa_socket:
         sock.listen(1)
 
         # Wait for a connection
-        print cl_cyan('Waiting for a connection...')
+        print(cl_cyan('Waiting for a connection...'))
         self.connection, client_address = sock.accept()
         self.connection.settimeout(0.01)
-        print cl_cyan('Connection from'), client_address
+        print(cl_cyan('Connection from'), client_address)
         self.isconnected = True
         last_read_time = time.time()
 
@@ -187,13 +181,13 @@ class iiwa_socket:
                 if elapsed_time > 5.0:  # Didn't receive a pack in 5s
                     self.close() # Disconnect from iiwa
                     self.isconnected = False
-                    print cl_lightred('No packet received from iiwa for 5s!')
+                    print(cl_lightred('No packet received from iiwa for 5s!'))
 
         self.connection.shutdown(socket.SHUT_RDWR)
         self.connection.close()
         sock.close()
         self.isconnected = False
-        print cl_lightred('Connection is closed!')
+        print(cl_lightred('Connection is closed!'))
     #   ~M: Connection socket ===================
 
     #   M: Command send thread ==================
@@ -291,7 +285,7 @@ def read_conf():
             print cl_red('Error:'), "conf.txt doesn't include correct IP/Port! e.g. server 172.31.1.50 port 1234"
             exit()
     else:
-        print cl_red('Error:'), "conf.txt doesn't exist!"
+        print(cl_red('Error:'), "conf.txt doesn't exist!")
         exit()
 
     return [IP, Port]
