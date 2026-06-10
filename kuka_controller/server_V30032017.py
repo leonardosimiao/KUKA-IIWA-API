@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # KUKA API for ROS
 version = 'V15032017++'
