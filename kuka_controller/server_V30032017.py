@@ -283,7 +283,7 @@ def read_conf():
         Port = ''
         with open(f_conf, 'r') as f:
             for line in f:
-            l_splt = line.split()
+                l_splt = line.split()
             if len(l_splt)==4 and l_splt[0] == 'server':
                 IP = l_splt[1]
                 Port = int(l_splt[3])
