@@ -11,7 +11,8 @@ version = 'V15032017++'
 # Dependencies: conf.txt, ROS server, Rospy, KUKA iiwa java SDK, KUKA iiwa robot.
 
 #######################################################################################################################
-import thread, time, os
+import time, os
+import threading as thread
 import rospy
 from std_msgs.msg import String
 
