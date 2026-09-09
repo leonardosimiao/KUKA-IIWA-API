@@ -280,7 +280,11 @@ def read_conf():
     try:
         IP = os.getenv('ROS_IP')
         Port = os.getenv('IIWA_SERVER_PORT')
-    else:
+        if IP is None:
+            raise EnvironmentError("A variável de ambiente ROS_IP não está definida.")
+        if Port is None:
+            raise EnvironmentError("A variável de ambiente IIWA_SERVER_PORT não está definida.")
+    except EnvironmentError as e:
         f_conf = os.path.abspath(os.path.dirname(__file__)) + '/conf.txt'
         if os.path.isfile(f_conf):
             IP = ''
