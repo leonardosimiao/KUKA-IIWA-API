@@ -277,22 +277,26 @@ class kuka_iiwa_ros_node:
 
 #   M:  Reading config file for Server IP and Port =================
 def read_conf():
-    f_conf = os.path.abspath(os.path.dirname(__file__)) + '/conf.txt'
-    if os.path.isfile(f_conf):
-        IP = ''
-        Port = ''
-        with open(f_conf, 'r') as f:
-            for line in f:
-                l_splt = line.split()
-            if len(l_splt)==4 and l_splt[0] == 'server':
-                IP = l_splt[1]
-                Port = int(l_splt[3])
-        if len(IP.split('.'))!=4 or Port<=0:
-            print(cl_red('Error:'), "conf.txt doesn't include correct IP/Port! e.g. server 172.31.1.50 port 1234")
-            exit()
+    try:
+        IP = os.getenv('ROS_IP')
+        Port = os.getenv('IIWA_SERVER_PORT')
     else:
-        print(cl_red('Error:'), "conf.txt doesn't exist!")
-        exit()
+        f_conf = os.path.abspath(os.path.dirname(__file__)) + '/conf.txt'
+        if os.path.isfile(f_conf):
+            IP = ''
+            Port = ''
+            with open(f_conf, 'r') as f:
+                for line in f:
+                    l_splt = line.split()
+                if len(l_splt)==4 and l_splt[0] == 'server':
+                    IP = l_splt[1]
+                    Port = int(l_splt[3])
+            if len(IP.split('.'))!=4 or Port<=0:
+                print(cl_red('Error:'), "conf.txt doesn't include correct IP/Port! e.g. server 172.31.1.50 port 1234")
+                exit()
+        else:
+            print(cl_red('Error:'), "conf.txt doesn't exist!")
+            exit()
 
     return [IP, Port]
 #   ~M:  Reading config file for Server IP and Port ================
