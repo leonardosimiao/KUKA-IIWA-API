@@ -279,7 +279,7 @@ class kuka_iiwa_ros_node:
 def read_conf():
     try:
         IP = os.getenv('ROS_IP')
-        Port = os.getenv('IIWA_SERVER_PORT')
+        Port = int(os.getenv('IIWA_SERVER_PORT'))
         if IP is None:
             raise EnvironmentError("A variável de ambiente ROS_IP não está definida.")
         if Port is None:
