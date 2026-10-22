@@ -301,7 +301,7 @@ def read_conf():
             if len(IP.split('.'))!=4 or Port<=0:
                 print(cl_red('Error:'), "conf.txt doesn't include correct IP/Port! e.g. server 172.31.1.50 port 1234")
                 exit()
-            ETH_IP = IP
+            ETH_IP = '172.31.1.2'
         else:
             print(cl_red('Error:'), "conf.txt doesn't exist!")
             exit()
@@ -314,7 +314,7 @@ def read_conf():
 ######################################################################################################################
 if __name__ == '__main__':
     [IP, Port] = read_conf()
-    ETH_IP = IP
+    ETH_IP = '172.31.1.2'
     try:
         node = kuka_iiwa_ros_node(IP, ETH_IP, Port) # Make a Kuka_iiwa ROS node
     except rospy.ROSInterruptException:
