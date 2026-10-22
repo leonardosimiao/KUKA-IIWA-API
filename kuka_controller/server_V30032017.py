@@ -209,8 +209,8 @@ class iiwa_socket:
 #   Class: Kuka iiwa ROS node    #####################
 class kuka_iiwa_ros_node:
     #   M: __init__ ===========================
-    def __init__(self, ip, port): # Makes kuka_iiwa ROS node
-        self.iiwa_soc = iiwa_socket(ip, port)
+    def __init__(self, ip, eth_ip, port): # Makes kuka_iiwa ROS node
+        self.iiwa_soc = iiwa_socket(eth_ip, port)
 
         #   Wait until iiwa is connected zzz!
         while not self.iiwa_soc.isready:
@@ -279,8 +279,11 @@ class kuka_iiwa_ros_node:
 def read_conf():
     try:
         IP = os.getenv('ROS_IP')
+        ETH_IP = os.getenv('ETH_IP')
         Port = int(os.getenv('IIWA_SERVER_PORT'))
         if IP is None:
+            raise EnvironmentError("A variável de ambiente ROS_IP não está definida.")
+        if ETH_IP is None:
             raise EnvironmentError("A variável de ambiente ROS_IP não está definida.")
         if Port is None:
             raise EnvironmentError("A variável de ambiente IIWA_SERVER_PORT não está definida.")
@@ -309,10 +312,10 @@ def read_conf():
 ## MAIN ##
 ######################################################################################################################
 if __name__ == '__main__':
-    [IP, Port] = read_conf()
+    [IP, ETH_IP, Port] = read_conf()
 
     try:
-        node = kuka_iiwa_ros_node(IP, Port) # Make a Kuka_iiwa ROS node
+        node = kuka_iiwa_ros_node(IP, ETH_IP, Port) # Make a Kuka_iiwa ROS node
     except rospy.ROSInterruptException:
         pass
 ######################################################################################################################
