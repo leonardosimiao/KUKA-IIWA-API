@@ -314,7 +314,7 @@ def read_conf():
 ######################################################################################################################
 if __name__ == '__main__':
     [IP, Port] = read_conf()
-
+    ETH_IP = IP
     try:
         node = kuka_iiwa_ros_node(IP, ETH_IP, Port) # Make a Kuka_iiwa ROS node
     except rospy.ROSInterruptException:
